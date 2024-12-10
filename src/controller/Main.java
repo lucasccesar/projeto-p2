@@ -92,7 +92,8 @@ public class Main {
         if (user.accountType().equals("client")) {
             System.out.println("\n2. Pegar livro emprestado");
             System.out.println("3. Devolver livro");
-            System.out.println("4. Sair da conta");
+            System.out.println("4. Visualizar livros para devolver");
+            System.out.println("5. Sair da conta");
 
             action = scan.nextInt();
             System.out.print("\n");
@@ -100,7 +101,8 @@ public class Main {
         } else {
             System.out.println("\n2. Adicionar livro");
             System.out.println("3. Remover livro");
-            System.out.println("4. Sair da conta");
+            System.out.printf("4. Visualizar livros emprestados (%d livro(s) emprestado(s))\n", library.getBorrowedBooks().size());
+            System.out.println("5. Sair da conta");
 
             action = scan.nextInt();
             System.out.print("\n");
@@ -129,11 +131,14 @@ public class Main {
                 library.returnBook(title, (Client) user);
             }
         } else if (action == 4) {
+            Client client = (Client) user;
+            library.showBooksToReturn(client);
+        } else if (action == 5) {
             library.logout();
             loginSignup();
         }
 
-        if (action != 4) {
+        if (action != 5) {
             showActions();
         }
     }
@@ -152,11 +157,13 @@ public class Main {
             String title = scan.next();
             library.removeBook(title);
         } else if (action == 4) {
+            library.showBorrowedBooks();
+        } else if (action == 5) {
             library.logout();
             loginSignup();
         }
 
-        if (action != 4) {
+        if (action != 5) {
             showActions();
         }
     }

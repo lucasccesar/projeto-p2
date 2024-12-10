@@ -9,18 +9,18 @@ public class Client extends User {
         super(name, email, password);
     }
 
-    private List<Borrowed> borrowedBooks = new ArrayList<>();
+    private List<Borrowed> userBorrowedBooks = new ArrayList<>();
 
     public void addBorrowedBook(Borrowed borrowedBook){
-        borrowedBooks.add(borrowedBook);
+        userBorrowedBooks.add(borrowedBook);
     }
 
     public void removeBorrowedBook(Borrowed borrowedBook){
-        borrowedBooks.remove(borrowedBook);
+        userBorrowedBooks.remove(borrowedBook);
     }
 
     public List<Borrowed> getBorrowedBooks(){
-        return borrowedBooks;
+        return userBorrowedBooks;
     }
 
     @Override

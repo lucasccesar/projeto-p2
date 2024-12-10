@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Borrowed {
 
@@ -50,7 +51,8 @@ public class Borrowed {
 
     @Override
     public String toString() {
-        return String.format("Livro: %s, Emprestado por: %s, Data do empréstimo: %s, Data de devolução: %s",
-                book, borrower.getName(), borrowedDate, dueDate);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return String.format("Livro: %s, Pego Emprestado por: %s, Data do empréstimo: %s, Data limite de devolução: %s",
+                book, borrower.getName(),borrowedDate.format(formatter), dueDate.format(formatter));
     }
 }

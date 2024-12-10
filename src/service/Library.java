@@ -10,6 +10,7 @@ public class Library {
 
     private List<User> users = new ArrayList<>();
     private List<Book> books = new ArrayList<>();
+    private List<Borrowed> borrowedBooks = new ArrayList<>();
     private User currentUser;
 
     public boolean isUsersNull(){
@@ -77,16 +78,19 @@ public class Library {
 
     public void borrowBook(String title, Client user) {
         Book currentBook = null;
+        Borrowed currentBorrowed = null;
         for (Book book : books) {
             if (book.getTitle().equalsIgnoreCase(title)) {
                 LocalDate agora = LocalDate.now();
                 Borrowed borrowed = new Borrowed(book, user, agora, agora.plusDays(14));
+                currentBorrowed = borrowed;
                 user.addBorrowedBook(borrowed);
                 System.out.println("Livro " + title + " pego emprestado com sucesso.");
                 currentBook = book;
             }
         }
         if(currentBook != null){
+            borrowedBooks.add(currentBorrowed);
             books.remove(currentBook);
         }
     }
@@ -94,8 +98,8 @@ public class Library {
     public void returnBook(String title, Client user) {
         Book currentBook = null;
         Borrowed currentBorrowed = null;
-        List<Borrowed> borrowedBooks = user.getBorrowedBooks();
-        for (Borrowed borrowed : borrowedBooks) {
+        List<Borrowed> userBorrowedBooks = user.getBorrowedBooks();
+        for (Borrowed borrowed : userBorrowedBooks) {
             if (borrowed.getBook().getTitle().equalsIgnoreCase(title)) {
                 currentBorrowed = borrowed;
                 currentBook = borrowed.getBook();
@@ -104,6 +108,7 @@ public class Library {
         }
         if(currentBook != null){
             user.removeBorrowedBook(currentBorrowed);
+            borrowedBooks.remove(currentBorrowed);
             books.add(currentBook);
         }
     }
@@ -121,5 +126,36 @@ public class Library {
                 System.out.println("Livro " + title + " removido com sucesso.");
             }
         }
+    }
+
+    public void showBooksToReturn(Client user){
+        List<Borrowed> userBorrowedBooks = user.getBorrowedBooks();
+        if(!userBorrowedBooks.isEmpty()) {
+            System.out.println("Livros Para Devolver:");
+            for (int i = 0; i < userBorrowedBooks.size(); i++) {
+                System.out.printf("%d. %s", i + 1, userBorrowedBooks.get(i));
+                System.out.println();
+            }
+            System.out.print("\n");
+        } else{
+            System.out.println("Você não tem nenhum livro para devolver.");
+        }
+    }
+
+    public void showBorrowedBooks(){
+        if(!borrowedBooks.isEmpty()){
+            System.out.println("Livros Emprestados:");
+            for(int i = 0; i < borrowedBooks.size(); i++){
+                System.out.printf("%d. %s", i+1, borrowedBooks.get(i));
+                System.out.println();
+            }
+            System.out.print("\n");
+        } else{
+            System.out.println("Nenhum livro foi emprestado.");
+        }
+    }
+
+    public List<Borrowed> getBorrowedBooks(){
+        return borrowedBooks;
     }
 }
